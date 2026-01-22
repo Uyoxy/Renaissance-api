@@ -10,6 +10,8 @@ import { Comment } from './comments/entities/comment.entity';
 import { Category } from './categories/entities/category.entity';
 import { Media } from './media/entities/media.entity';
 import configuration from './config/configuration';
+import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
+import { APP_GUARD } from '@nestjs/core';
 
 @Module({
   imports: [
@@ -17,6 +19,18 @@ import configuration from './config/configuration';
       isGlobal: true,
       load: [configuration],
       envFilePath: ['.env.local', '.env'],
+    }),
+    ThrottlerModule.forRootAsync({
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (config: ConfigService) => ({
+        throttlers: [
+          {
+            ttl: config.get<number>('THROTTLE_TTL', 60000), // 60 seconds
+            limit: config.get<number>('THROTTLE_LIMIT', 10), // 10 requests
+          },
+        ],
+      }),
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -26,6 +40,12 @@ import configuration from './config/configuration';
     TypeOrmModule.forFeature([User, Post, Comment, Category, Media]),
   ],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [
+    AppService,
+    {
+      provide: APP_GUARD,
+      useClass: ThrottlerGuard,
+    },
+  ],
 })
 export class AppModule {}
