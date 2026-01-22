@@ -1,8 +1,6 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
 import { getDatabaseConfig } from './config/database.config';
 import { User } from './users/entities/user.entity';
 import { Post } from './posts/entities/post.entity';
@@ -11,6 +9,7 @@ import { Category } from './categories/entities/category.entity';
 import { Media } from './media/entities/media.entity';
 import configuration from './config/configuration';
 import { AuthModule } from './auth/auth.module';
+import { validate } from './common/config/env.validation';
 
 @Module({
   imports: [
@@ -18,6 +17,8 @@ import { AuthModule } from './auth/auth.module';
       isGlobal: true,
       load: [configuration],
       envFilePath: ['.env.local', '.env'],
+      validate,
+      cache: true,
     }),
     TypeOrmModule.forRootAsync({
       imports: [ConfigModule],
@@ -27,7 +28,7 @@ import { AuthModule } from './auth/auth.module';
     TypeOrmModule.forFeature([User, Post, Comment, Category, Media]),
     AuthModule,
   ],
-  controllers: [AppController],
-  providers: [AppService],
+  controllers: [],
+  providers: [],
 })
 export class AppModule {}

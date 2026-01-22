@@ -1,3 +1,6 @@
+endeavor to join the telegram group before you apply for issues 
+https://t.me/+7CVopkI8kO85MWY0
+
 # Renaissance-api
 
 Renaissance is a Web3-powered football fan engagement platform built on the **Stellar blockchain**, designed to redefine how fans follow teams, engage with football stars, and participate in transparent sports betting.
