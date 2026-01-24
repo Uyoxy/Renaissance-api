@@ -11,6 +11,7 @@ import { Match } from './matches/entities/match.entity';
 import { Bet } from './bets/entities/bet.entity';
 import { PlayerCardMetadata } from './player-card-metadata/entities/player-card-metadata.entity';
 import { Prediction } from './predictions/entities/prediction.entity';
+import { Spin } from './spin/entities/spin.entity';
 import configuration from './config/configuration';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
@@ -22,6 +23,7 @@ import { PostsModule } from './posts/posts.module';
 import { PredictionsModule } from './predictions/predictions.module';
 import { validate } from './common/config/env.validation';
 import { BlockchainModule } from './blockchain/blockchain.module';
+import { SpinModule } from './spin/spin.module';
 
 @Module({
   imports: [
@@ -59,6 +61,7 @@ import { BlockchainModule } from './blockchain/blockchain.module';
       Bet,
       PlayerCardMetadata,
       Prediction,
+      Spin,
     ]),
     AuthModule,
     BlockchainModule,
@@ -67,6 +70,7 @@ import { BlockchainModule } from './blockchain/blockchain.module';
     PlayerCardMetadataModule,
     PostsModule,
     PredictionsModule,
+    SpinModule,
   ],
   controllers: [],
   providers: [
