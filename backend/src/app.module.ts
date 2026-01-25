@@ -11,6 +11,7 @@ import { Match } from './matches/entities/match.entity';
 import { Bet } from './bets/entities/bet.entity';
 import { PlayerCardMetadata } from './player-card-metadata/entities/player-card-metadata.entity';
 import { Prediction } from './predictions/entities/prediction.entity';
+import { FreeBetVoucher } from './free-bet-vouchers/entities/free-bet-voucher.entity';
 import { Spin } from './spin/entities/spin.entity';
 import configuration from './config/configuration';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
@@ -21,6 +22,7 @@ import { MatchesModule } from './matches/matches.module';
 import { PlayerCardMetadataModule } from './player-card-metadata/player-card-metadata.module';
 import { PostsModule } from './posts/posts.module';
 import { PredictionsModule } from './predictions/predictions.module';
+import { FreeBetVouchersModule } from './free-bet-vouchers/free-bet-vouchers.module';
 import { validate } from './common/config/env.validation';
 import { BlockchainModule } from './blockchain/blockchain.module';
 import { LeaderboardsModule } from './leaderboards/leaderboards.module';
@@ -64,6 +66,7 @@ import { SpinModule } from './spin/spin.module';
       Bet,
       PlayerCardMetadata,
       Prediction,
+      FreeBetVoucher,
       Spin,
     ]),
     AuthModule,
@@ -72,6 +75,7 @@ import { SpinModule } from './spin/spin.module';
     PlayerCardMetadataModule,
     PostsModule,
     PredictionsModule,
+    FreeBetVouchersModule,
     SpinModule,
     LeaderboardModule,
   ],
