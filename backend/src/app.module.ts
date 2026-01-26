@@ -12,7 +12,9 @@ import { Match } from './matches/entities/match.entity';
 import { Bet } from './bets/entities/bet.entity';
 import { PlayerCardMetadata } from './player-card-metadata/entities/player-card-metadata.entity';
 import { Prediction } from './predictions/entities/prediction.entity';
+import { FreeBetVoucher } from './free-bet-vouchers/entities/free-bet-voucher.entity';
 import { Spin } from './spin/entities/spin.entity';
+import { SpinSession } from './spin/entities/spin-session.entity';
 import configuration from './config/configuration';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
@@ -22,6 +24,7 @@ import { MatchesModule } from './matches/matches.module';
 import { PlayerCardMetadataModule } from './player-card-metadata/player-card-metadata.module';
 import { PostsModule } from './posts/posts.module';
 import { PredictionsModule } from './predictions/predictions.module';
+import { FreeBetVouchersModule } from './free-bet-vouchers/free-bet-vouchers.module';
 import { validate } from './common/config/env.validation';
 import { BlockchainModule } from './blockchain/blockchain.module';
 import { LeaderboardsModule } from './leaderboards/leaderboards.module';
@@ -53,9 +56,9 @@ import { ReconciliationModule } from './reconciliation/reconciliation.module';
       }),
     }),
     TypeOrmModule.forRootAsync({
-     imports: [ConfigModule],
-     inject: [ConfigService],
-     useFactory: (configService: ConfigService) => getTypeOrmConfig(configService),
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) => getTypeOrmConfig(configService),
     }),
     TypeOrmModule.forFeature([
       User,
@@ -67,7 +70,9 @@ import { ReconciliationModule } from './reconciliation/reconciliation.module';
       Bet,
       PlayerCardMetadata,
       Prediction,
+      FreeBetVoucher,
       Spin,
+      SpinSession,
     ]),
     AuthModule,
     BetsModule,
@@ -75,8 +80,10 @@ import { ReconciliationModule } from './reconciliation/reconciliation.module';
     PlayerCardMetadataModule,
     PostsModule,
     PredictionsModule,
+    FreeBetVouchersModule,
     SpinModule,
     LeaderboardModule,
+    LeaderboardsModule,
     ReconciliationModule,
   ],
   controllers: [],
@@ -87,4 +94,4 @@ import { ReconciliationModule } from './reconciliation/reconciliation.module';
     },
   ],
 })
-export class AppModule {}
+export class AppModule { }
