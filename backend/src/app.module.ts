@@ -28,6 +28,7 @@ import { validate } from './common/config/env.validation';
 import { BlockchainModule } from './blockchain/blockchain.module';
 import { LeaderboardsModule } from './leaderboards/leaderboards.module';
 import { SpinModule } from './spin/spin.module';
+import { AdminModule } from './admin/admin.module';
 
 
 
@@ -80,6 +81,7 @@ import { SpinModule } from './spin/spin.module';
     FreeBetVouchersModule,
     SpinModule,
     LeaderboardsModule,
+    AdminModule,
   ],
   controllers: [],
   providers: [
