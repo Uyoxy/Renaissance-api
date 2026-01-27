@@ -1,7 +1,7 @@
 // create-prediction.dto.ts
 import { IsEnum, IsNotEmpty, IsUUID } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
-import { MatchOutcome } from '../../matches/entities/match.entity';
+import { MatchOutcome } from '../../common/enums/match.enums';
 
 export class CreatePredictionDto {
   @ApiProperty({

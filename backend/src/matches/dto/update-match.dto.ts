@@ -2,7 +2,7 @@ import { PartialType } from '@nestjs/mapped-types';
 import { CreateMatchDto } from './create-match.dto';
 import { IsNumber, IsOptional, Min, IsEnum } from 'class-validator';
 import { ApiPropertyOptional } from '@nestjs/swagger';
-import { MatchOutcome } from '../entities/match.entity';
+import { MatchOutcome } from '../../common/enums/match.enums';
 
 export class UpdateMatchDto extends PartialType(CreateMatchDto) {
   @ApiPropertyOptional({

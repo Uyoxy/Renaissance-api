@@ -7,7 +7,7 @@ import {
   IsOptional,
 } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { MatchOutcome } from '../../matches/entities/match.entity';
+import { MatchOutcome } from '../../common/enums/match.enums';
 
 export class CreateBetDto {
   @ApiProperty({

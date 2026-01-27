@@ -1,6 +1,6 @@
 import { IsEnum, IsNumber, IsOptional, Min } from 'class-validator';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { MatchStatus, MatchOutcome } from '../entities/match.entity';
+import { MatchStatus, MatchOutcome } from '../../common/enums/match.enums';
 
 export class UpdateMatchStatusDto {
   @ApiProperty({

@@ -2,7 +2,8 @@ import { Column, Entity, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { User } from '../../users/entities/user.entity';
-import { Match, MatchOutcome } from '../../matches/entities/match.entity';
+import { Match } from '../../matches/entities/match.entity';
+import { MatchOutcome } from '../../common/enums/match.enums';
 
 export enum BetStatus {
   PENDING = 'pending',
