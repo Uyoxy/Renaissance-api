@@ -1,28 +1,16 @@
 import { Module } from '@nestjs/common';
-import { CqrsModule } from '@nestjs/cqrs';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { LeaderboardStats } from './entities/leaderboard-stats.entity';
+import { UserLeaderboardStats } from './entities/user-leaderboard-stats.entity';
 import { LeaderboardService } from './leaderboard.service';
-import { LeaderboardController } from './leaderboard.controller';
-import { Leaderboard } from './entities/leaderboard.entity';
 import { User } from '../users/entities/user.entity';
-import {
-  BetPlacedEventHandler,
-  BetSettledEventHandler,
-  StakeCreditedEventHandler,
-  StakeDebitedEventHandler,
-} from './listeners';
-
-const EVENT_HANDLERS = [
-  BetPlacedEventHandler,
-  BetSettledEventHandler,
-  StakeCreditedEventHandler,
-  StakeDebitedEventHandler,
-];
+import { LeaderboardController } from './leaderboard.controller';
+import { LeaderboardQueryService } from './leaderboard-query.service';
 
 @Module({
-  imports: [CqrsModule, TypeOrmModule.forFeature([Leaderboard, User])],
+  imports: [TypeOrmModule.forFeature([LeaderboardStats, UserLeaderboardStats, User])],
   controllers: [LeaderboardController],
-  providers: [LeaderboardService, ...EVENT_HANDLERS],
+  providers: [LeaderboardService, LeaderboardQueryService],
   exports: [LeaderboardService],
 })
 export class LeaderboardModule {}

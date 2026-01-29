@@ -1,37 +1,17 @@
 import { Controller, Get, Param, Query } from '@nestjs/common';
-import { LeaderboardService } from './leaderboard.service';
-import { Leaderboard } from './entities/leaderboard.entity';
+import { LeaderboardQueryService } from './leaderboard-query.service';
+import { LeaderboardType } from './leaderboard-type.enum';
 
-@Controller('leaderboards')
+@Controller('leaderboard')
 export class LeaderboardController {
-  constructor(private readonly leaderboardService: LeaderboardService) {}
+  constructor(private readonly service: LeaderboardQueryService) {}
 
-  /**
-   * Get user's leaderboard stats
-   */
-  @Get('users/:userId')
-  async getUserLeaderboard(
-    @Param('userId') userId: string,
-  ): Promise<Leaderboard | null> {
-    return this.leaderboardService.getLeaderboardStats(userId);
-  }
-
-  /**
-   * Get top leaderboard entries
-   * Query params:
-   * - limit: number of results (default: 100)
-   * - orderBy: 'totalWinnings' | 'bettingAccuracy' | 'winningStreak' (default: 'totalWinnings')
-   */
-  @Get('top')
-  async getTopLeaderboard(
-    @Query('limit') limit: string = '100',
-    @Query('orderBy')
-    orderBy: 'totalWinnings' | 'bettingAccuracy' | 'winningStreak' =
-      'totalWinnings',
-  ): Promise<Leaderboard[]> {
-    return this.leaderboardService.getTopLeaderboard(
-      parseInt(limit, 10),
-      orderBy,
-    );
+  @Get()
+  getLeaderboard(
+    @Query('type') type: LeaderboardType,
+    @Query('page') page = 1,
+    @Query('limit') limit = 10,
+  ) {
+    return this.service.getLeaderboard(type, Number(page), Number(limit));
   }
 }

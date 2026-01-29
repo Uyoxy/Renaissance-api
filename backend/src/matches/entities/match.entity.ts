@@ -1,22 +1,16 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, Index } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Prediction } from '../../predictions/entities/prediction.entity';
+import { MatchStatus, MatchOutcome } from '../../common/enums/match.enums';
 
-export enum MatchStatus {
-  UPCOMING = 'upcoming',
-  LIVE = 'live',
-  FINISHED = 'finished',
-  CANCELLED = 'cancelled',
-  POSTPONED = 'postponed',
-}
-
-export enum MatchOutcome {
-  HOME_WIN = 'home_win',
-  AWAY_WIN = 'away_win',
-  DRAW = 'draw',
-}
+export { MatchStatus, MatchOutcome };
 
 @Entity('matches')
+@Index(['status'])
+@Index(['startTime'])
+@Index(['league'])
+@Index(['season'])
+@Index(['status', 'startTime'])
 export class Match extends BaseEntity {
   @Column({ name: 'home_team' })
   homeTeam: string;
@@ -30,6 +24,7 @@ export class Match extends BaseEntity {
   @Column({
     type: 'enum',
     enum: MatchStatus,
+    enumName: 'match_status_enum',
     default: MatchStatus.UPCOMING,
   })
   status: MatchStatus;
@@ -43,6 +38,7 @@ export class Match extends BaseEntity {
   @Column({
     type: 'enum',
     enum: MatchOutcome,
+    enumName: 'match_outcome_enum',
     nullable: true,
   })
   outcome: MatchOutcome;

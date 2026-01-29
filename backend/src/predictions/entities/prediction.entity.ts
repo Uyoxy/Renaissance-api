@@ -1,7 +1,8 @@
 import { Column, Entity, ManyToOne, JoinColumn, Index } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { User } from '../../users/entities/user.entity';
-import { Match, MatchOutcome } from '../../matches/entities/match.entity';
+import { Match } from '../../matches/entities/match.entity';
+import { MatchOutcome } from '../../common/enums/match.enums';
 
 export enum PredictionStatus {
   PENDING = 'pending',
@@ -12,6 +13,10 @@ export enum PredictionStatus {
 
 @Entity('predictions')
 @Index(['userId', 'matchId'], { unique: true })
+@Index(['userId'])
+@Index(['matchId'])
+@Index(['status'])
+@Index(['userId', 'status'])
 export class Prediction extends BaseEntity {
   @Column({ name: 'user_id' })
   userId: string;
@@ -23,6 +28,7 @@ export class Prediction extends BaseEntity {
     name: 'predicted_outcome',
     type: 'enum',
     enum: MatchOutcome,
+    enumName: 'prediction_outcome_enum',
   })
   predictedOutcome: MatchOutcome;
 

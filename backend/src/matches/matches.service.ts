@@ -6,12 +6,14 @@ import {
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { Match, MatchStatus, MatchOutcome } from './entities/match.entity';
+import { Match } from './entities/match.entity';
+import { MatchStatus, MatchOutcome } from '../common/enums/match.enums';
 import {
   CreateMatchDto,
   UpdateMatchDto,
   UpdateMatchStatusDto,
 } from './dto';
+import { CacheInvalidationService } from '../common/cache/cache-invalidation.service';
 
 export interface PaginatedMatches {
   data: Match[];
@@ -36,6 +38,7 @@ export class MatchesService {
   constructor(
     @InjectRepository(Match)
     private readonly matchRepository: Repository<Match>,
+    private readonly cacheInvalidationService: CacheInvalidationService,
   ) {}
 
   /**
@@ -209,7 +212,9 @@ export class MatchesService {
     }
 
     Object.assign(match, updateMatchDto);
-    return this.matchRepository.save(match);
+    const savedMatch = await this.matchRepository.save(match);
+    await this.cacheInvalidationService.invalidatePattern('matches*');
+    return savedMatch;
   }
 
   /**
@@ -240,7 +245,9 @@ export class MatchesService {
     }
 
     Object.assign(match, updateStatusDto);
-    return this.matchRepository.save(match);
+    const savedMatch = await this.matchRepository.save(match);
+    await this.cacheInvalidationService.invalidatePattern('matches*');
+    return savedMatch;
   }
 
   /**
@@ -261,6 +268,7 @@ export class MatchesService {
 
     match.status = MatchStatus.CANCELLED;
     await this.matchRepository.save(match);
+    await this.cacheInvalidationService.invalidatePattern('matches*');
 
     return {
       message: `Match ${matchId} has been cancelled`,

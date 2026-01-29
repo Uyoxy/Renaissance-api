@@ -1,4 +1,4 @@
-import { Column, Entity, OneToMany } from 'typeorm';
+import { Column, Entity, OneToMany, Index } from 'typeorm';
 import { BaseEntity } from '../../common/entities/base.entity';
 import { Post } from '../../posts/entities/post.entity';
 import { Comment } from '../../comments/entities/comment.entity';
@@ -20,6 +20,10 @@ export enum UserStatus {
 }
 
 @Entity('users')
+@Index(['email'])
+@Index(['role'])
+@Index(['status'])
+@Index(['emailVerified'])
 export class User extends BaseEntity {
   @Column({ unique: true })
   email: string;
@@ -89,6 +93,8 @@ export class User extends BaseEntity {
   @OneToMany(() => Transaction, (transaction) => transaction.user)
   transactions: Transaction[];
 
-  @OneToMany(() => Prediction, (prediction) => prediction.user, { cascade: true })
+  @OneToMany(() => Prediction, (prediction) => prediction.user, {
+    cascade: true,
+  })
   predictions: Prediction[];
 }

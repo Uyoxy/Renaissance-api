@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { DataSource, Repository } from 'typeorm';
-import { WalletService } from '../wallet.service';
-import { User } from '../../users/entities/user.entity';
-import { Transaction } from '../entities/transaction.entity';
+import { DataSource } from 'typeorm';
+import { WalletService } from './wallet.service';
+import { User } from '../users/entities/user.entity';
+import {
+  Transaction,
+  TransactionType,
+} from '../transactions/entities/transaction.entity';
 
 describe('WalletService', () => {
   let service: WalletService;
-  let userRepository: Repository<User>;
-  let transactionRepository: Repository<Transaction>;
-  let dataSource: DataSource;
 
   const mockUserRepository = {
     findOne: jest.fn(),
@@ -57,11 +57,6 @@ describe('WalletService', () => {
     }).compile();
 
     service = module.get<WalletService>(WalletService);
-    userRepository = module.get<Repository<User>>(getRepositoryToken(User));
-    transactionRepository = module.get<Repository<Transaction>>(
-      getRepositoryToken(Transaction),
-    );
-    dataSource = module.get<DataSource>(DataSource);
   });
 
   afterEach(() => {
@@ -194,7 +189,7 @@ describe('WalletService', () => {
       const result = await service.updateUserBalance(
         userId,
         amount,
-        'bet_winning',
+        TransactionType.BET_WINNING,
       );
 
       expect(result).toEqual({
@@ -213,7 +208,7 @@ describe('WalletService', () => {
       queryRunner.manager.findOne.mockResolvedValue(mockUser);
 
       await expect(
-        service.updateUserBalance(userId, amount, 'bet_winning'),
+        service.updateUserBalance(userId, amount, TransactionType.BET_WINNING),
       ).rejects.toThrow('Insufficient wallet balance for this operation');
     });
   });

@@ -1,6 +1,7 @@
-import { Module } from '@nestjs/common';
+import { Module, MiddlewareConsumer } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
+import { ScheduleModule } from '@nestjs/schedule';
 import { getTypeOrmConfig } from './database/typeorm.config';
 import { User } from './users/entities/user.entity';
 import { Post } from './posts/entities/post.entity';
@@ -11,7 +12,9 @@ import { Match } from './matches/entities/match.entity';
 import { Bet } from './bets/entities/bet.entity';
 import { PlayerCardMetadata } from './player-card-metadata/entities/player-card-metadata.entity';
 import { Prediction } from './predictions/entities/prediction.entity';
-import { Leaderboard } from './leaderboard/entities/leaderboard.entity';
+import { FreeBetVoucher } from './free-bet-vouchers/entities/free-bet-voucher.entity';
+import { Spin } from './spin/entities/spin.entity';
+import { SpinSession } from './spin/entities/spin-session.entity';
 import configuration from './config/configuration';
 import { ThrottlerModule, ThrottlerGuard } from '@nestjs/throttler';
 import { APP_GUARD } from '@nestjs/core';
@@ -21,10 +24,20 @@ import { MatchesModule } from './matches/matches.module';
 import { PlayerCardMetadataModule } from './player-card-metadata/player-card-metadata.module';
 import { PostsModule } from './posts/posts.module';
 import { PredictionsModule } from './predictions/predictions.module';
-import { StakingModule } from './staking/staking.module';
-import { LeaderboardModule } from './leaderboard/leaderboard.module';
+import { FreeBetVouchersModule } from './free-bet-vouchers/free-bet-vouchers.module';
 import { validate } from './common/config/env.validation';
-import { BlockchainModule } from './blockchain/blockchain.module';
+import { LeaderboardModule } from './leaderboard/leaderboard.module';
+import { LeaderboardsModule } from './leaderboards/leaderboards.module';
+import { SpinModule } from './spin/spin.module';
+import { HealthModule } from './health/health.module';
+import { CacheConfigModule } from './common/cache/cache.module';
+import { AdminModule } from './admin/admin.module';
+import { UserLeaderboardStats } from './leaderboard/entities/user-leaderboard-stats.entity';
+import { ReconciliationModule } from './reconciliation/reconciliation.module';
+
+import { LoggerModule } from './common/logger/logger.module';
+import { CorrelationIdMiddleware } from './common/middleware/correlation-id.middleware';
+
 
 @Module({
   imports: [
@@ -35,6 +48,7 @@ import { BlockchainModule } from './blockchain/blockchain.module';
       validate,
       cache: true,
     }),
+    ScheduleModule.forRoot(),
     ThrottlerModule.forRootAsync({
       imports: [ConfigModule],
       inject: [ConfigService],
@@ -48,9 +62,10 @@ import { BlockchainModule } from './blockchain/blockchain.module';
       }),
     }),
     TypeOrmModule.forRootAsync({
-     imports: [ConfigModule],
-     inject: [ConfigService],
-     useFactory: (configService: ConfigService) => getTypeOrmConfig(configService),
+      imports: [ConfigModule],
+      inject: [ConfigService],
+      useFactory: (configService: ConfigService) =>
+        getTypeOrmConfig(configService),
     }),
     TypeOrmModule.forFeature([
       User,
@@ -62,24 +77,37 @@ import { BlockchainModule } from './blockchain/blockchain.module';
       Bet,
       PlayerCardMetadata,
       Prediction,
+<<<<<<< HEAD
       Leaderboard,
-    ]),
-    AuthModule,
-    BlockchainModule,
-    BetsModule,
-    MatchesModule,
-    PlayerCardMetadataModule,
-    PostsModule,
-    PredictionsModule,
+=======
+      FreeBetVoucher,
+      Spin,
+      SpinSession,
+      UserLeaderboardStats,
+      FreeBetVoucher,
+      Spin,
+      SpinSession,
+      UserLeaderboardStats,,
+<<<<<<< HEAD
     StakingModule,
     LeaderboardModule,
-  ],
-  controllers: [],
-  providers: [
-    {
+=======
+    LeaderboardModule,
+    FreeBetVouchersModule,
+    SpinModule,
+    LeaderboardsModule,
+    HealthModule,
+    CacheConfigModule,
+    AdminModule,
+    ReconciliationModule,
+    LoggerModule,
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
   ],
 })
-export class AppModule {}
+export class AppModule {
+    configure(consumer: MiddlewareConsumer) {
+    consumer.apply(CorrelationIdMiddleware).forRoutes('*');
+  }
+}
