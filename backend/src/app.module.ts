@@ -25,6 +25,7 @@ import { PlayerCardMetadataModule } from './player-card-metadata/player-card-met
 import { PostsModule } from './posts/posts.module';
 import { PredictionsModule } from './predictions/predictions.module';
 import { FreeBetVouchersModule } from './free-bet-vouchers/free-bet-vouchers.module';
+import { StakingModule } from './staking/staking.module';
 import { validate } from './common/config/env.validation';
 import { LeaderboardModule } from './leaderboard/leaderboard.module';
 import { LeaderboardsModule } from './leaderboards/leaderboards.module';
@@ -34,6 +35,7 @@ import { CacheConfigModule } from './common/cache/cache.module';
 import { AdminModule } from './admin/admin.module';
 import { UserLeaderboardStats } from './leaderboard/entities/user-leaderboard-stats.entity';
 import { ReconciliationModule } from './reconciliation/reconciliation.module';
+import { UsersModule } from './users/users.module';
 
 import { LoggerModule } from './common/logger/logger.module';
 import { CorrelationIdMiddleware } from './common/middleware/correlation-id.middleware';
@@ -96,18 +98,20 @@ import { Leaderboard } from './leaderboard/entities/leaderboard.entity';
     FreeBetVouchersModule,
     SpinModule,
     LeaderboardsModule,
+    UsersModule,
     HealthModule,
     CacheConfigModule,
     AdminModule,
     ReconciliationModule,
     LoggerModule,
+    {
       provide: APP_GUARD,
       useClass: ThrottlerGuard,
     },
   ],
 })
 export class AppModule {
-    configure(consumer: MiddlewareConsumer) {
+  configure(consumer: MiddlewareConsumer) {
     consumer.apply(CorrelationIdMiddleware).forRoutes('*');
   }
 }
